@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useProduct } from "../../hooks/useProducts";
 import { useParams, Link } from "react-router-dom";
 import {
   Box,
@@ -9,27 +9,14 @@ import {
   Container,
   Typography,
 } from "@mui/material";
-import { getProductBySlug } from "../../api/products";
-import type { Product } from "../../types/product";
+
 import { useCartStore } from "../../state/cart-store";
 
 export function ProductDetailsPage() {
   const { slug } = useParams();
   const addToCart = useCartStore((state) => state.addToCart);
 
-  const [product, setProduct] = useState<Product | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    async function loadProduct() {
-      setIsLoading(true);
-      const result = await getProductBySlug(slug ?? "");
-      setProduct(result);
-      setIsLoading(false);
-    }
-
-    loadProduct();
-  }, [slug]);
+  const { data: product, isLoading } = useProduct(slug ?? "");
 
   if (isLoading) {
     return (

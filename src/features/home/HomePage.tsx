@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import {
   Box,
   Button,
@@ -8,8 +8,7 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
-import { getProducts } from "../../api/products";
-import type { Product } from "../../types/product";
+import { useProducts } from "../../hooks/useProducts";
 import { ProductCard } from "../../components/product/ProductCard";
 import { useCartStore } from "../../state/cart-store";
 import { Header } from "../../components/layout/Header";
@@ -19,14 +18,11 @@ import { CheckoutPanel } from "../../components/cart/CheckoutPanel";
 export function HomePage() {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All");
-  const [products, setProducts] = useState<Product[]>([]);
+  const { data: products = [], isLoading } = useProducts();
 
   const totalItems = useCartStore((state) => state.getTotalItems());
   const totalPrice = useCartStore((state) => state.getTotalPrice());
 
-  useEffect(() => {
-    getProducts().then(setProducts);
-  }, []);
 
   const categories = useMemo(() => {
     const uniqueCategories = Array.from(
@@ -96,7 +92,11 @@ export function HomePage() {
               Games
             </Typography>
 
-            {filteredProducts.length === 0 ? (
+            {isLoading ? (
+  <Paper sx={{ p: 3, borderRadius: 3 }}>
+    <Typography variant="body1">Loading games...</Typography>
+  </Paper>
+) : filteredProducts.length === 0 ? (
               <Paper sx={{ p: 3, borderRadius: 3 }}>
                 <Typography variant="body1">
                   No games matched your search or category filter.
