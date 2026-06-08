@@ -1,17 +1,43 @@
-import { useMemo } from "react";
+import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
-import { Box, Button, Card, CardContent, CardMedia, Container, Typography } from "@mui/material";
-import { mockProducts } from "../products/mock-products";
+import {
+  Box,
+  Button,
+  Card,
+  CardContent,
+  CardMedia,
+  Container,
+  Typography,
+} from "@mui/material";
+import { getProductBySlug } from "../../api/products";
+import type { Product } from "../../types/product";
 import { useCartStore } from "../../state/cart-store";
 
 export function ProductDetailsPage() {
   const { slug } = useParams();
   const addToCart = useCartStore((state) => state.addToCart);
 
-  const product = useMemo(
-    () => mockProducts.find((item) => item.slug === slug),
-    [slug]
-  );
+  const [product, setProduct] = useState<Product | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    async function loadProduct() {
+      setIsLoading(true);
+      const result = await getProductBySlug(slug ?? "");
+      setProduct(result);
+      setIsLoading(false);
+    }
+
+    loadProduct();
+  }, [slug]);
+
+  if (isLoading) {
+    return (
+      <Container sx={{ py: 4 }}>
+        <Typography variant="h5">Loading product...</Typography>
+      </Container>
+    );
+  }
 
   if (!product) {
     return (
@@ -38,7 +64,7 @@ export function ProductDetailsPage() {
           <CardMedia
             component="img"
             height="360"
-            image={product.imageUrl}
+            image={product.image_url}
             alt={product.title}
           />
 
@@ -61,15 +87,15 @@ export function ProductDetailsPage() {
 
             <Typography
               variant="body2"
-              color={product.inStock ? "success.main" : "error.main"}
+              color={product.in_stock ? "success.main" : "error.main"}
               sx={{ mb: 3 }}
             >
-              {product.inStock ? "In stock" : "Out of stock"}
+              {product.in_stock ? "In stock" : "Out of stock"}
             </Typography>
 
             <Button
               variant="contained"
-              disabled={!product.inStock}
+              disabled={!product.in_stock}
               onClick={() => addToCart(product)}
             >
               Add to Cart

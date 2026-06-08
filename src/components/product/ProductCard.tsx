@@ -27,7 +27,7 @@ export function ProductCard({ product }: ProductCardProps) {
         <CardMedia
           component="img"
           height="220"
-          image={product.imageUrl}
+          image={product.image_url}
           alt={product.title}
         />
 
@@ -50,10 +50,10 @@ export function ProductCard({ product }: ProductCardProps) {
 
           <Typography
             variant="body2"
-            color={product.inStock ? "success.main" : "error.main"}
+            color={product.in_stock ? "success.main" : "error.main"}
             sx={{ mt: 1, mb: 2 }}
           >
-            {product.inStock ? "In stock" : "Out of stock"}
+            {product.in_stock ? "In stock" : "Out of stock"}
           </Typography>
         </CardContent>
       </Box>
@@ -62,7 +62,7 @@ export function ProductCard({ product }: ProductCardProps) {
         <Button
           variant="contained"
           fullWidth
-          disabled={!product.inStock}
+          disabled={!product.in_stock}
           onClick={() => addToCart(product)}
         >
           Add to Cart

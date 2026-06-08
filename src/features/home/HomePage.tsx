@@ -1,6 +1,15 @@
-import { useMemo, useState } from "react";
-import { Box, Button, Container, Grid, Paper, Stack, Typography } from "@mui/material";
-import { mockProducts } from "../products/mock-products";
+import { useEffect, useMemo, useState } from "react";
+import {
+  Box,
+  Button,
+  Container,
+  Grid,
+  Paper,
+  Stack,
+  Typography,
+} from "@mui/material";
+import { getProducts } from "../../api/products";
+import type { Product } from "../../types/product";
 import { ProductCard } from "../../components/product/ProductCard";
 import { useCartStore } from "../../state/cart-store";
 import { Header } from "../../components/layout/Header";
@@ -10,22 +19,27 @@ import { CheckoutPanel } from "../../components/cart/CheckoutPanel";
 export function HomePage() {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All");
+  const [products, setProducts] = useState<Product[]>([]);
 
   const totalItems = useCartStore((state) => state.getTotalItems());
   const totalPrice = useCartStore((state) => state.getTotalPrice());
 
+  useEffect(() => {
+    getProducts().then(setProducts);
+  }, []);
+
   const categories = useMemo(() => {
     const uniqueCategories = Array.from(
-      new Set(mockProducts.map((product) => product.category))
+      new Set(products.map((product) => product.category))
     );
 
     return ["All", ...uniqueCategories];
-  }, []);
+  }, [products]);
 
   const filteredProducts = useMemo(() => {
     const normalizedSearch = searchTerm.toLowerCase().trim();
 
-    return mockProducts.filter((product) => {
+    return products.filter((product) => {
       const matchesSearch =
         !normalizedSearch ||
         product.title.toLowerCase().includes(normalizedSearch) ||
@@ -37,7 +51,7 @@ export function HomePage() {
 
       return matchesSearch && matchesCategory;
     });
-  }, [searchTerm, selectedCategory]);
+  }, [searchTerm, selectedCategory, products]);
 
   return (
     <Box sx={{ minHeight: "100vh", backgroundColor: "#f7f7fb" }}>

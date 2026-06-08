@@ -4,10 +4,10 @@ export interface Product {
   slug: string;
   description: string;
   price: number;
-  imageUrl: string;
+  image_url: string;
   category: string;
   platform: string;
-  inStock: boolean;
+  in_stock: boolean;
   featured: boolean;
 }
 
