@@ -1,4 +1,5 @@
 import { useMemo, useState } from "react";
+import type { Session } from "@supabase/supabase-js";
 import {
   Box,
   Button,
@@ -14,8 +15,13 @@ import { useCartStore } from "../../state/cart-store";
 import { Header } from "../../components/layout/Header";
 import { CartPanel } from "../../components/cart/CartPanel";
 import { CheckoutPanel } from "../../components/cart/CheckoutPanel";
+import { AuthPanel } from "../../components/auth/AuthPanel";
 
-export function HomePage() {
+interface HomePageProps {
+  session: Session | null;
+}
+
+export function HomePage({ session }: HomePageProps) {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All");
   const { data: products = [], isLoading } = useProducts();
@@ -114,9 +120,14 @@ export function HomePage() {
           </Grid>
 
           <Grid size={{ xs: 12, md: 4 }}>
-            <CartPanel />
-            <CheckoutPanel />
-          </Grid>
+  <CartPanel />
+  <CheckoutPanel session={session} />
+  <AuthPanel
+    userEmail={session?.user.email ?? null}
+    onSignedIn={() => {}}
+    onSignedOut={() => {}}
+  />
+</Grid>
         </Grid>
       </Container>
     </Box>

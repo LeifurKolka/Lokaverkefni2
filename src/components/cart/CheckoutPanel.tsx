@@ -1,4 +1,5 @@
 import { useState } from "react";
+import type { Session } from "@supabase/supabase-js";
 import { Alert, Box, Button, Paper, TextField, Typography } from "@mui/material";
 import { useCartStore } from "../../state/cart-store";
 
@@ -9,7 +10,11 @@ interface FakeOrder {
   total: number;
 }
 
-export function CheckoutPanel() {
+interface CheckoutPanelProps {
+  session: Session | null;
+}
+
+export function CheckoutPanel({ session }: CheckoutPanelProps) {
   const items = useCartStore((state) => state.items);
   const totalPrice = useCartStore((state) => state.getTotalPrice());
   const clearCart = useCartStore((state) => state.clearCart);
@@ -19,6 +24,7 @@ export function CheckoutPanel() {
   const [completedOrder, setCompletedOrder] = useState<FakeOrder | null>(null);
 
   const handleCheckout = () => {
+    if (!session) return;
     if (!fullName.trim() || !email.trim() || items.length === 0) return;
 
     const fakeOrder: FakeOrder = {
@@ -72,6 +78,12 @@ export function CheckoutPanel() {
         </Box>
       ) : (
         <>
+          {!session && (
+            <Alert severity="warning" sx={{ mb: 2 }}>
+              You must be signed in to complete checkout.
+            </Alert>
+          )}
+
           <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
             No real payment is processed. This is only a simulated checkout.
           </Typography>
@@ -82,6 +94,7 @@ export function CheckoutPanel() {
               value={fullName}
               onChange={(e) => setFullName(e.target.value)}
               fullWidth
+              disabled={!session}
             />
 
             <TextField
@@ -89,6 +102,7 @@ export function CheckoutPanel() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               fullWidth
+              disabled={!session}
             />
 
             <Typography variant="body1" sx={{ fontWeight: "bold" }}>
@@ -98,7 +112,7 @@ export function CheckoutPanel() {
             <Button
               variant="contained"
               onClick={handleCheckout}
-              disabled={items.length === 0}
+              disabled={!session || items.length === 0}
             >
               Place Fake Order
             </Button>
