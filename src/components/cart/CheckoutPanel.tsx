@@ -2,13 +2,10 @@ import { useState } from "react";
 import type { Session } from "@supabase/supabase-js";
 import { Alert, Box, Button, Paper, TextField, Typography } from "@mui/material";
 import { useCartStore } from "../../state/cart-store";
+import { createFakeOrder } from "../../utils/checkout";
+import type { FakeOrder } from "../../utils/checkout";
 
-interface FakeOrder {
-  orderNumber: string;
-  fullName: string;
-  email: string;
-  total: number;
-}
+
 
 interface CheckoutPanelProps {
   session: Session | null;
@@ -24,21 +21,24 @@ export function CheckoutPanel({ session }: CheckoutPanelProps) {
   const [completedOrder, setCompletedOrder] = useState<FakeOrder | null>(null);
 
   const handleCheckout = () => {
-    if (!session) return;
-    if (!fullName.trim() || !email.trim() || items.length === 0) return;
+  if (!session) return;
 
-    const fakeOrder: FakeOrder = {
-      orderNumber: `ORD-${Date.now()}`,
+  const fakeOrder = createFakeOrder(
+    {
       fullName,
       email,
-      total: totalPrice,
-    };
+    },
+    items,
+    totalPrice
+  );
 
-    clearCart();
-    setCompletedOrder(fakeOrder);
-    setFullName("");
-    setEmail("");
-  };
+  if (!fakeOrder) return;
+
+  clearCart();
+  setCompletedOrder(fakeOrder);
+  setFullName("");
+  setEmail("");
+};
 
   const handleContinueShopping = () => {
     setCompletedOrder(null);

@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import type { Session } from "@supabase/supabase-js";
+import { useEffect, useState } from "react";
 import { HomePage } from "./features/home/HomePage";
 import { ProductDetailsPage } from "./features/product-details/ProductDetailsPage";
 import { supabase } from "./lib/supabase";

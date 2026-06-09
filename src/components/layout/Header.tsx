@@ -20,17 +20,23 @@ export function Header({ searchTerm, onSearchChange }: HeaderProps) {
   const totalItems = useCartStore((state) => state.getTotalItems());
 
   return (
-    <AppBar position="static" color="primary" sx={{ mb: 4 }}>
+    <AppBar
+      position="static"
+      sx={{
+        mb: 4,
+        backgroundColor: "#0d1b2a",
+      }}
+    >
       <Toolbar sx={{ display: "flex", gap: 2, justifyContent: "space-between" }}>
-        <Typography variant="h6" sx={{ fontWeight: "bold" }}>
-          Video Game Store
+        <Typography variant="h6" sx={{ fontWeight: "bold", color: "#f5f5f5" }}>
+          Loaf's Video Game Store
         </Typography>
 
         <Box
           sx={{
             display: "flex",
             alignItems: "center",
-            backgroundColor: "rgba(255,255,255,0.15)",
+            backgroundColor: "rgba(255,255,255,0.12)",
             px: 2,
             py: 0.5,
             borderRadius: 2,
@@ -38,18 +44,21 @@ export function Header({ searchTerm, onSearchChange }: HeaderProps) {
             maxWidth: 400,
           }}
         >
-          <SearchIcon sx={{ mr: 1 }} />
+          <SearchIcon sx={{ mr: 1, color: "#f5f5f5" }} />
           <InputBase
             placeholder="Search games..."
             value={searchTerm}
             onChange={(e) => onSearchChange(e.target.value)}
-            sx={{ color: "inherit", width: "100%" }}
+            sx={{
+              color: "#f5f5f5",
+              width: "100%",
+            }}
           />
         </Box>
 
         <IconButton color="inherit">
           <Badge badgeContent={totalItems} color="error">
-            <ShoppingCartIcon />
+            <ShoppingCartIcon sx={{ color: "#f5f5f5" }} />
           </Badge>
         </IconButton>
       </Toolbar>

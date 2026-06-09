@@ -18,7 +18,7 @@ export function ProductCard({ product }: ProductCardProps) {
   const addToCart = useCartStore((state) => state.addToCart);
 
   return (
-    <Card sx={{ height: "100%" }}>
+    <Card sx={{ height: "100%", backgroundColor: "#d9d9d9" }}>
       <Box
         component={Link}
         to={`/products/${product.slug}`}
@@ -32,19 +32,19 @@ export function ProductCard({ product }: ProductCardProps) {
         />
 
         <CardContent>
-          <Typography variant="h6" sx={{ fontWeight: "bold", mb: 1 }}>
+          <Typography variant="h6" sx={{ fontWeight: "bold", mb: 1, color: "#111" }}>
             {product.title}
           </Typography>
 
-          <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
+          <Typography variant="body2" sx={{ color: "#444", mb: 1 }}>
             {product.category} • {product.platform}
           </Typography>
 
-          <Typography variant="body2" sx={{ mb: 2 }}>
+          <Typography variant="body2" sx={{ mb: 2, color: "#111" }}>
             {product.description}
           </Typography>
 
-          <Typography variant="subtitle1" sx={{ fontWeight: "bold" }}>
+          <Typography variant="subtitle1" sx={{ fontWeight: "bold", color: "#111" }}>
             ${product.price.toFixed(2)}
           </Typography>
 
@@ -64,6 +64,7 @@ export function ProductCard({ product }: ProductCardProps) {
           fullWidth
           disabled={!product.in_stock}
           onClick={() => addToCart(product)}
+          sx={{ backgroundColor: "#1b263b" }}
         >
           Add to Cart
         </Button>

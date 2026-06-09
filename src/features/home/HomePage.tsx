@@ -1,14 +1,6 @@
-import { useMemo, useState } from "react";
 import type { Session } from "@supabase/supabase-js";
-import {
-  Box,
-  Button,
-  Container,
-  Grid,
-  Paper,
-  Stack,
-  Typography,
-} from "@mui/material";
+import { useMemo, useState } from "react";
+import { Box, Button, Container, Grid, Paper, Stack, Typography } from "@mui/material";
 import { useProducts } from "../../hooks/useProducts";
 import { ProductCard } from "../../components/product/ProductCard";
 import { useCartStore } from "../../state/cart-store";
@@ -24,11 +16,11 @@ interface HomePageProps {
 export function HomePage({ session }: HomePageProps) {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All");
-  const { data: products = [], isLoading } = useProducts();
 
   const totalItems = useCartStore((state) => state.getTotalItems());
   const totalPrice = useCartStore((state) => state.getTotalPrice());
 
+  const { data: products = [], isLoading } = useProducts();
 
   const categories = useMemo(() => {
     const uniqueCategories = Array.from(
@@ -56,27 +48,29 @@ export function HomePage({ session }: HomePageProps) {
   }, [searchTerm, selectedCategory, products]);
 
   return (
-    <Box sx={{ minHeight: "100vh", backgroundColor: "#f7f7fb" }}>
+    <Box sx={{ minHeight: "100vh", backgroundColor: "#2b2d31" }}>
       <Header searchTerm={searchTerm} onSearchChange={setSearchTerm} />
 
       <Container maxWidth="lg">
-        <Typography variant="body1" color="text.secondary" sx={{ mb: 4 }}>
+        <Typography variant="body1" sx={{ mb: 4, color: "#d6d6d6" }}>
           Browse games, discover new favorites, and build your cart.
         </Typography>
 
-        <Paper sx={{ p: 3, mb: 4, borderRadius: 3 }}>
-          <Typography variant="h5" sx={{ fontWeight: "bold", mb: 1 }}>
+        <Paper sx={{ p: 3, mb: 4, borderRadius: 3, backgroundColor: "#d9d9d9" }}>
+          <Typography variant="h5" sx={{ fontWeight: "bold", mb: 1, color: "#111" }}>
             Cart Summary
           </Typography>
 
-          <Typography variant="body1">Total items: {totalItems}</Typography>
+          <Typography variant="body1" sx={{ color: "#111" }}>
+            Total items: {totalItems}
+          </Typography>
 
-          <Typography variant="body1">
+          <Typography variant="body1" sx={{ color: "#111" }}>
             Total price: ${totalPrice.toFixed(2)}
           </Typography>
         </Paper>
 
-        <Typography variant="h5" sx={{ fontWeight: "bold", mb: 2 }}>
+        <Typography variant="h5" sx={{ fontWeight: "bold", mb: 2, color: "#f1f1f1" }}>
           Categories
         </Typography>
 
@@ -86,6 +80,16 @@ export function HomePage({ session }: HomePageProps) {
               key={category}
               variant={selectedCategory === category ? "contained" : "outlined"}
               onClick={() => setSelectedCategory(category)}
+              sx={
+                selectedCategory === category
+                  ? {
+                      backgroundColor: "#1b263b",
+                    }
+                  : {
+                      color: "#d9d9d9",
+                      borderColor: "#d9d9d9",
+                    }
+              }
             >
               {category}
             </Button>
@@ -94,17 +98,19 @@ export function HomePage({ session }: HomePageProps) {
 
         <Grid container spacing={4}>
           <Grid size={{ xs: 12, md: 8 }}>
-            <Typography variant="h5" sx={{ fontWeight: "bold", mb: 3 }}>
+            <Typography variant="h5" sx={{ fontWeight: "bold", mb: 3, color: "#f1f1f1" }}>
               Games
             </Typography>
 
             {isLoading ? (
-  <Paper sx={{ p: 3, borderRadius: 3 }}>
-    <Typography variant="body1">Loading games...</Typography>
-  </Paper>
-) : filteredProducts.length === 0 ? (
-              <Paper sx={{ p: 3, borderRadius: 3 }}>
-                <Typography variant="body1">
+              <Paper sx={{ p: 3, borderRadius: 3, backgroundColor: "#d9d9d9" }}>
+                <Typography variant="body1" sx={{ color: "#111" }}>
+                  Loading games...
+                </Typography>
+              </Paper>
+            ) : filteredProducts.length === 0 ? (
+              <Paper sx={{ p: 3, borderRadius: 3, backgroundColor: "#d9d9d9" }}>
+                <Typography variant="body1" sx={{ color: "#111" }}>
                   No games matched your search or category filter.
                 </Typography>
               </Paper>
@@ -120,14 +126,14 @@ export function HomePage({ session }: HomePageProps) {
           </Grid>
 
           <Grid size={{ xs: 12, md: 4 }}>
-  <CartPanel />
-  <CheckoutPanel session={session} />
-  <AuthPanel
-    userEmail={session?.user.email ?? null}
-    onSignedIn={() => {}}
-    onSignedOut={() => {}}
-  />
-</Grid>
+            <CartPanel />
+            <CheckoutPanel session={session} />
+            <AuthPanel
+              userEmail={session?.user.email ?? null}
+              onSignedIn={() => {}}
+              onSignedOut={() => {}}
+            />
+          </Grid>
         </Grid>
       </Container>
     </Box>
