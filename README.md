@@ -1,73 +1,50 @@
-# React + TypeScript + Vite
+# Loaf's Video Game Store
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Fyrir þetta verkefni ákvað ég að byggja vefsíðu fyrir tölvuleikjabúð, byggt með: React, Typescript, Supabase, Zustand, React Query og MUI
 
-Currently, two official plugins are available:
+Notendur geta leitað af leikjum, searchað og filterað vörur, skoðað details um vörurnar, Signað upp/signað inn, addað leikjum í cartið og svo klárað "fake checkout"
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Live Demo
 
-## React Compiler
+[Opnaðu appið hér] lokaverkefni2.vercel.app
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Features
 
-## Expanding the ESLint configuration
+- Heimasíða fyrir búðina
+- Listi fyrir vörur
+- Details síða fyrir hverja vöru
+- Search fyrir vörur
+- Filters fyrir flokka
+- Supabase product data
+- User authentification með Supabase
+- Cart með "add", "remove", og "quantity controls"
+- "Fake checkout" og "Fake payment flow"
+- Staðfestingar state eftir fake checkoutið
+- Responsive uppsetning
+- Zustand state management fyrir cartið
+- React Query fyrir product fetching
+- Tests fyrir bæði cart logic og checkout logic
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## Tech Stack
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+- React
+- TypeScript
+- Vite
+- MUI
+- Zustand
+- TanStack React Query
+- Supabase
+- Vitest
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+## Local Setup
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
-
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+1. Clonaðu repositoryið
+2. Installaðu dependancies:
+"npm install"
+3. búðu til .env file í project rootinu og skrifaðu:
+VITE_SUPABASE_URL=your_supabase_url
+VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
+4. runnaðu development serverinn:
+"npm run dev"
+5. runnaðu testin:
+"npm run test:run"
